@@ -21,7 +21,7 @@ discoveryTopic = "homeassistant/switch/"+uniqueId+"/config"
 def connectFunction (client, userdata, flags, rc):
   if rc==0:
     print("connected OK Returned code=",rc)
-    MyClient.publish(discoveryTopic, "{\"~\":\""+uniqueId+"\"name\":\""+name+"\",\"unique_id\":\""+uniqueId+"\",\"state_topic\":\"~/power\",\"command_topic\":\"~/power/set\",\"availability_topic\":\"~/available\"}", 1, True)
+    MyClient.publish(discoveryTopic, "{\"~\":\""+uniqueId+"\",\"name\":\""+name+"\",\"unique_id\":\""+uniqueId+"\",\"state_topic\":\"~/power\",\"command_topic\":\"~/power/set\",\"availability_topic\":\"~/available\"}", 1, True)
     MyClient.publish(availabilityTopic, "online") # Publish message to MQTT broker
     MyClient.publish(stateTopic, "ON")
     MyClient.subscribe(commandTopic) # Subscribe after re-connect
