@@ -1,0 +1,18 @@
+[Service]
+ExecStart=/usr/bin/python /usr/local/bin/home-assistant-raspberry-pi-mqtt/mqtt-device.py
+WorkingDirectory=/usr/local/bin/home-assistant-raspberry-pi-mqtt/
+Restart=always
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=mqtt-device
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target
+
+
+#Copy this file into /etc/systemd/system as root
+#To enable service: sudo systemctl enable mqtt-device.service
+#To run service (will be automatically started on next reboot): sudo systemctl start mqtt-device.service
