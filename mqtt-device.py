@@ -8,16 +8,20 @@ brokerAdr = "192.168.X.X"
 brokerPort = 1883 
 brokerUserName = "XXX"
 brokerPassword = "XXX"
-availabilityTopic = "unique_id/available"
-stateTopic = "unique_id/power"
-commandTopic = "unique_id/power/set"
-discoveryTopic = "homeassistant/switch/unique_id/config"
+
+name = "friendly name"
+uniqueId = "unique_id"
+
+availabilityTopic = uniqueId+"/available"
+stateTopic = uniqueId+"/power"
+commandTopic = uniqueId+"/power/set"
+discoveryTopic = "homeassistant/switch/"+uniqueId+"/config"
 
 # "on connect" event
 def connectFunction (client, userdata, flags, rc):
   if rc==0:
     print("connected OK Returned code=",rc)
-    MyClient.publish(discoveryTopic, "{\"name\":\"Unique Name\",\"unique_id\":\"unique_id\",\"state_topic\":\"unique_id/power\",\"command_topic\":\"unique_id/power/set\",\"availability_topic\":\"unique_id/available\"}", 1, True)
+    MyClient.publish(discoveryTopic, "{\"~\":\""+uniqueId+"\"name\":\""+name+"\",\"unique_id\":\""+uniqueId+"\",\"state_topic\":\"~/power\",\"command_topic\":\"~/power/set\",\"availability_topic\":\"~/available\"}", 1, True)
     MyClient.publish(availabilityTopic, "online") # Publish message to MQTT broker
     MyClient.publish(stateTopic, "ON")
     MyClient.subscribe(commandTopic) # Subscribe after re-connect
