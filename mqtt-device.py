@@ -5,7 +5,7 @@ from subprocess import call
 
 #configuration:
 brokerAdr = "192.168.X.X"
-brokerPort = 1883 
+brokerPort = 1883
 brokerUserName = "XXX"
 brokerPassword = "XXX"
 
@@ -54,5 +54,4 @@ while (1):
   MyClient.will_set(availabilityTopic, "offline")
   MyClient.connect(brokerAdr, brokerPort) # Connect to the test MQTT broker
   MyClient.on_message = messageFunction # Attach the messageFunction to subscription
-  MyClient.loop_forever()    
-u
+  MyClient.loop_forever()
