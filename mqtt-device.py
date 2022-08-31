@@ -12,18 +12,21 @@ brokerPassword = "XXX"
 name = "friendly name"
 uniqueId = "unique_id"
 
+# todo - add device
+
 availabilityTopic = uniqueId+"/available"
-stateTopic = uniqueId+"/power"
-commandTopic = uniqueId+"/power/set"
-discoveryTopic = "homeassistant/switch/"+uniqueId+"/config"
+commandTopic = uniqueId+"/command"
+
+def configFunction(platform, name, payload_press):
+  MyClient.publish("homeassistant/"+platform+"/"+uniqueId+"/config", "{\"~\":\""+uniqueId+"\",\"name\":\""+name+"\",\"unique_id\":\""+uniqueId+"\",\"command_topic\":\""+commandTopic+"\",\"availability_topic\":\""+availabilityTopic+"\"}", 1, True)
 
 # "on connect" event
 def connectFunction (client, userdata, flags, rc):
   if rc==0:
     print("connected OK Returned code=",rc)
-    MyClient.publish(discoveryTopic, "{\"~\":\""+uniqueId+"\",\"name\":\""+name+"\",\"unique_id\":\""+uniqueId+"\",\"state_topic\":\"~/power\",\"command_topic\":\"~/power/set\",\"availability_topic\":\"~/available\"}", 1, True)
+    configFunction("button", name+" Shutdown", "shutdown")
+    configFunction("button", name+" Reboot", "reboot")
     MyClient.publish(availabilityTopic, "online") # Publish message to MQTT broker
-    MyClient.publish(stateTopic, "ON")
     MyClient.subscribe(commandTopic) # Subscribe after re-connect
   else:
     print("Bad connection Returned code=",rc)
@@ -39,13 +42,9 @@ def messageFunction (client, userdata, message):
 # handle new MQTT command function
 def handleCommand (command):
   if command=="reboot":
-    MyClient.publish(stateTopic, "OFF")
     call(['shutdown', '-r', 'now'], shell=False) #reboot host
-  elif command=="OFF":
-    MyClient.publish(stateTopic, "OFF")
+  elif command=="shutdown":
     call(['shutdown', '-h', 'now'], shell=False) #shut down host
-  elif command=="test":
-    MyClient.publish(stateTopic, "Reply to test msg") # Publish reply to an incomming msg with payload "test"
 
 while (1):
   MyClient = mqtt.Client() # Create a MQTT client object
