@@ -19,7 +19,22 @@ commandTopic = uniqueId+"/command"
 
 def configButtonFunction(buttonName, payload_press):
   specificId = uniqueId+"_"+payload_press
-  MyClient.publish("homeassistant/button/"+specificId+"/config", "{\"~\":\""+specificId+"\",\"name\":\""+buttonName+"\",\"unique_id\":\""+specificId+"\",\"command_topic\":\""+commandTopic+"\",\"availability_topic\":\""+availabilityTopic+"\",\"payload_press\":\""+payload_press+"\"}", 1, True)
+  config = {
+    "~":specificId,
+    "name":buttonName,
+    "unique_id":specificId,
+    "command_topic":commandTopic,
+    "availability_topic":availabilityTopic,
+    "payload_press":payload_press,
+    "device": {
+      "identifiers": uniqueId,
+      "name": name,
+      "manufacturer": "XXX",
+      "model": "XXX"
+    }
+  }
+  configJson = json.dumps(config)
+  MyClient.publish("homeassistant/button/"+specificId+"/config", configJson, 1, True)
 
 # "on connect" event
 def connectFunction (client, userdata, flags, rc):
