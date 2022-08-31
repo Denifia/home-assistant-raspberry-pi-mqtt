@@ -4,29 +4,30 @@ import time
 from subprocess import call
 
 #configuration:
-brokerAdr = "192.168.X.X"
+brokerAdr = "192.168.XXX.XXX"
 brokerPort = 1883
 brokerUserName = "XXX"
 brokerPassword = "XXX"
 
-name = "friendly name"
-uniqueId = "unique_id"
+name = "XXX"
+uniqueId = "XXX"
 
 # todo - add device
 
 availabilityTopic = uniqueId+"/available"
 commandTopic = uniqueId+"/command"
 
-def configFunction(platform, name, payload_press):
-  MyClient.publish("homeassistant/"+platform+"/"+uniqueId+"/config", "{\"~\":\""+uniqueId+"\",\"name\":\""+name+"\",\"unique_id\":\""+uniqueId+"\",\"command_topic\":\""+commandTopic+"\",\"availability_topic\":\""+availabilityTopic+"\"}", 1, True)
+def configButtonFunction(buttonName, payload_press):
+  specificId = uniqueId+"_"+payload_press
+  MyClient.publish("homeassistant/button/"+specificId+"/config", "{\"~\":\""+specificId+"\",\"name\":\""+buttonName+"\",\"unique_id\":\""+specificId+"\",\"command_topic\":\""+commandTopic+"\",\"availability_topic\":\""+availabilityTopic+"\",\"payload_press\":\""+payload_press+"\"}", 1, True)
 
 # "on connect" event
 def connectFunction (client, userdata, flags, rc):
   if rc==0:
     print("connected OK Returned code=",rc)
-    configFunction("button", name+" Shutdown", "shutdown")
-    configFunction("button", name+" Reboot", "reboot")
-    MyClient.publish(availabilityTopic, "online") # Publish message to MQTT broker
+    configButtonFunction(name+" Shutdown", "shutdown")
+    configButtonFunction(name+" Reboot", "reboot")
+    MyClient.publish(availabilityTopic, "online", 1) # Publish message to MQTT broker
     MyClient.subscribe(commandTopic) # Subscribe after re-connect
   else:
     print("Bad connection Returned code=",rc)
