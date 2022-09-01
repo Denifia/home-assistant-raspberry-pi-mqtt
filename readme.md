@@ -1,13 +1,16 @@
 # Home Assistant Raspberry Pi MQTT
 
-Allow Home Assistant to auto discover your Raspberry Pi (or other linux devices) and expose the Shutdown and Restart buttons over MQTT.
+Allow Home Assistant to auto discover your Raspberry Pi (or other linux devices) and expose a Shutdown and Restart button over MQTT.
 
 Heavily inspired by [olkal's RPI-MQTT-shutdown](https://github.com/olkal/RPI-MQTT-shutdown) repo.
 
 ## Setup
 ```sh
+# you may need to install a few packages first but
+# on a raspberry pi they're probably already installed
 #apt update
 #apt install -y pip git python3 nano
+
 sudo pip install paho-mqtt
 cd /usr/local/bin
 sudo git clone https://github.com/Denifia/home-assistant-raspberry-pi-mqtt.git
