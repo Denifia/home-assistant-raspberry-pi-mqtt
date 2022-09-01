@@ -1,4 +1,10 @@
-# install
+# Home Assistant Raspberry Pi MQTT
+
+Allow Home Assistant to auto discover your Raspberry Pi (or other linux devices) and expose the Shutdown and Restart buttons over MQTT.
+
+Heavily inspired by [olkal's RPI-MQTT-shutdown](https://github.com/olkal/RPI-MQTT-shutdown) repo.
+
+## Setup
 ```sh
 #apt update
 #apt install -y pip git python3 nano
@@ -9,18 +15,18 @@ sudo git clone https://github.com/Denifia/home-assistant-raspberry-pi-mqtt.git
 # edit to suit your environment
 sudo nano /usr/local/bin/home-assistant-raspberry-pi-mqtt/mqtt-device.py
 
-# start up
+# test that it starts up
 sudo python /usr/local/bin/home-assistant-raspberry-pi-mqtt/mqtt-device.py
+
+# your raspberry pi and it's two buttons should now be in home assistant!
 ```
 
-# auto start
+# Run as service
 ```sh
 cd /usr/local/bin/home-assistant-raspberry-pi-mqtt
 sudo mv mqtt-device.service /etc/systemd/system/
 sudo systemctl enable mqtt-device.service
-```
 
-# run service
-```sh
+# start the service now instead of waiting for a reboot
 sudo systemctl start mqtt-device.service
 ```
