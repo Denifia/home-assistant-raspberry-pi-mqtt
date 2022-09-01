@@ -33,7 +33,7 @@ def configButtonFunction(buttonName, payload_press):
     "device": {
       "identifiers": deviceId, # Feel free to add more identifiers e.g. ["a mac address", "serial number", "whatever"]
       "name": deviceName,
-      "manufacturer": deviceManufacturer, 
+      "manufacturer": deviceManufacturer,
       "model": deviceModel,
       "suggested_area": deviceSuggestedArea
     }
@@ -45,8 +45,8 @@ def configButtonFunction(buttonName, payload_press):
 def connectFunction (client, userdata, flags, rc):
   if rc==0:
     print("connected OK Returned code=",rc)
-    configButtonFunction(name+" Shutdown", "shutdown")
-    configButtonFunction(name+" Reboot", "reboot")
+    configButtonFunction(deviceName+" Shutdown", "shutdown")
+    configButtonFunction(deviceName+" Reboot", "reboot")
     MyClient.publish(availabilityTopic, "online", 1) # Publish message to MQTT broker
     MyClient.subscribe(commandTopic) # Subscribe after re-connect
   else:
