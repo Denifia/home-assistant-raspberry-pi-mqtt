@@ -1,40 +1,45 @@
 #!/usr/bin/env python
 import paho.mqtt.client as mqtt
 import time
+import json
 from subprocess import call
 
-#configuration:
+# Creates a shutdown and restart button via MQTT with HASS auto discover
+
+# configure mqtt
 brokerAdr = "192.168.XXX.XXX"
 brokerPort = 1883
 brokerUserName = "XXX"
 brokerPassword = "XXX"
 
-name = "XXX"
-uniqueId = "XXX"
+# configure device
+deviceName = "XXX" # i.e. "Adguard Server"
+deviceId = "XXX" # i.e. "adguard_server"
+deviceManufacturer = "XXX" # i.e. "Raspberry Pi Foundation"
+deviceModel = "XXX" # i.e. "Raspberry Pi 3B"
+deviceSuggestedArea = "XXX" # i.e. "IT Stuff"
 
-# todo - add device
-
-availabilityTopic = uniqueId+"/available"
-commandTopic = uniqueId+"/command"
+availabilityTopic = deviceId+"/available"
+commandTopic = deviceId+"/command"
 
 def configButtonFunction(buttonName, payload_press):
-  specificId = uniqueId+"_"+payload_press
+  buttonId = deviceId+"_"+payload_press
   config = {
-    "~":specificId,
     "name":buttonName,
-    "unique_id":specificId,
+    "unique_id":buttonId,
     "command_topic":commandTopic,
     "availability_topic":availabilityTopic,
     "payload_press":payload_press,
     "device": {
-      "identifiers": uniqueId,
-      "name": name,
-      "manufacturer": "XXX",
-      "model": "XXX"
+      "identifiers": deviceId, # Feel free to add more identifiers e.g. ["a mac address", "serial number", "whatever"]
+      "name": deviceName,
+      "manufacturer": deviceManufacturer, 
+      "model": deviceModel,
+      "suggested_area": deviceSuggestedArea
     }
   }
   configJson = json.dumps(config)
-  MyClient.publish("homeassistant/button/"+specificId+"/config", configJson, 1, True)
+  MyClient.publish("homeassistant/button/"+buttonId+"/config", configJson, 1, True)
 
 # "on connect" event
 def connectFunction (client, userdata, flags, rc):
